@@ -1,0 +1,8 @@
+.sidebar {
+  background-color: #ccc;
+  width: 12em;
+
+  &.collapsed {
+    width: 4em;
+  }
+}

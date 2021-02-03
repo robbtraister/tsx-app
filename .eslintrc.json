@@ -1,0 +1,48 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "plugins": ["@typescript-eslint", "import", "prettier", "react"],
+  "extends": ["prettier", "prettier/@typescript-eslint"],
+  "rules": {
+    "prettier/prettier": "error",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/self-closing-comp": "error",
+    "@typescript-eslint/no-invalid-this": "error",
+    "@typescript-eslint/no-misused-new": "error",
+    "@typescript-eslint/no-shadow": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "vars": "all", "args": "after-used", "ignoreRestSiblings": true, "argsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/no-use-before-define": "error",
+    "no-invalid-this": "off",
+    "no-shadow": "off",
+    "no-unused-vars": "off",
+    "no-use-before-define": "off",
+    "no-var": "error",
+    "require-await": "error"
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "@typescript-eslint/no-invalid-this": "off",
+        "@typescript-eslint/no-misused-new": "off",
+        "@typescript-eslint/no-shadow": "off",
+        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+        "no-invalid-this": "error",
+        "no-shadow": "error",
+        "no-unused-vars": "error",
+        "no-use-before-define": "error"
+      }
+    }
+  ]
+}
