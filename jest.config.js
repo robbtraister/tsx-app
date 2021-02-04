@@ -3,6 +3,7 @@ const { compilerOptions } = require("./tsconfig.json");
 
 module.exports = {
   collectCoverage: true,
+  coveragePathIgnorePatterns: ["/fakes/", "/node_modules/"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   moduleNameMapper: {
     "\\.(scss)$": "identity-obj-proxy",

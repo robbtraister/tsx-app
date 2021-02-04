@@ -5,16 +5,21 @@ import { NavLink } from "react-router-dom";
 
 import styles from "./index.scss";
 
+interface Page {
+  id: string;
+  name: string;
+}
+
 export function Sidebar() {
   const [collapsed] = useState(false);
-  const [pages, setPages] = useState<string[]>();
+  const [pages, setPages] = useState<Page[]>();
 
   useEffect(() => {
     let mounted = true;
 
-    axios.get<{ pages: string[] }>("/api/v1/pages").then(({ data }) => {
+    axios.get<Page[]>("/api/v1/pages").then(({ data }) => {
       if (mounted) {
-        setPages(data.pages);
+        setPages(data);
       }
     });
 
@@ -30,8 +35,8 @@ export function Sidebar() {
     >
       <ul>
         {pages?.map((page) => (
-          <li key={page}>
-            <NavLink to={`/${page}`}>{page}</NavLink>
+          <li key={page.id}>
+            <NavLink to={`/${page.id}`}>{page.name}</NavLink>
           </li>
         ))}
       </ul>

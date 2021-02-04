@@ -1,16 +1,9 @@
 import { render, waitFor } from "@testing-library/react";
-import { rest } from "msw";
-import { setupServer } from "msw/node";
-
 import { StaticRouter } from "react-router";
 
-import { Sidebar } from ".";
+import { server } from "fakes/msw/server";
 
-const server = setupServer(
-  rest.get("/api/v1/pages", (_req, res, ctx) => {
-    return res(ctx.json({ pages: ["one", "two"] }));
-  })
-);
+import { Sidebar } from ".";
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());

@@ -16,6 +16,9 @@ describe("api/v1 routes", () => {
       .get("/api/v1/pages")
       .expect(200)
       .expect("Content-Type", /json/)
-      .expect({ pages: ["one", "two"] });
+      .expect([
+        { id: "one", name: "One" },
+        { id: "two", name: "Two" },
+      ]);
   });
 });

@@ -8,7 +8,10 @@ export function createApiV1Router() {
   });
 
   router.use("/pages", (_req, res) => {
-    res.send({ pages: ["one", "two"] });
+    res.send([
+      { id: "one", name: "One" },
+      { id: "two", name: "Two" },
+    ]);
   });
 
   return router;

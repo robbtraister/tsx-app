@@ -22,14 +22,14 @@ exports[`sidebar component mocked 2`] = `
         <a
           href="/one"
         >
-          one
+          One
         </a>
       </li>
       <li>
         <a
           href="/two"
         >
-          two
+          Two
         </a>
       </li>
     </ul>
