@@ -1,3 +1,5 @@
+import path from "path";
+
 import express from "express";
 
 import { createRouter } from "./router";
@@ -7,13 +9,16 @@ export function createApp(root = process.cwd()) {
 
   app.disable("x-powered-by");
 
-  app.use(express.static(`${root}/dist`, { index: false }));
-  app.use(express.static(`${root}/public`, { index: false }));
+  const distDir = path.join(root, "dist");
+  app.set("distDir", path.join(root, "dist"));
 
-  app.use(createRouter(root));
+  app.use(express.static(distDir, { index: false }));
+  app.use(express.static(path.join(root, "public"), { index: false }));
+
+  app.use(createRouter());
 
   app.use((_req, res) => {
-    res.sendFile(`${root}/dist/index.html`);
+    res.sendFile(path.join(distDir, "index.html"));
   });
 
   app.use((_err: any, _req: any, res: any, _next: any) => {
