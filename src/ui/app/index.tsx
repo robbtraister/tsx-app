@@ -12,6 +12,7 @@ export function App() {
       <Sidebar />
       <Pages />
       {process.env.NODE_ENV === "development" ? (
+        /* istanbul ignore next */
         <ReactQueryDevtools position="bottom-right" />
       ) : null}
     </QueryClientProvider>

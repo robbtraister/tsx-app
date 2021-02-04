@@ -1,3 +1,4 @@
+import axios from "axios";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -9,10 +10,17 @@ export function Sidebar() {
   const [pages, setPages] = useState<string[]>();
 
   useEffect(() => {
-    window
-      .fetch("/api/v1/pages")
-      .then((resp) => resp.json())
-      .then((json) => setPages(json.pages));
+    let mounted = true;
+
+    axios.get<{ pages: string[] }>("/api/v1/pages").then(({ data }) => {
+      if (mounted) {
+        setPages(data.pages);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return (
@@ -22,7 +30,7 @@ export function Sidebar() {
     >
       <ul>
         {pages?.map((page) => (
-          <li>
+          <li key={page}>
             <NavLink to={`/${page}`}>{page}</NavLink>
           </li>
         ))}

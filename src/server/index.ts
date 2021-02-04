@@ -24,5 +24,6 @@ export function createApp(root = process.cwd()) {
 }
 
 export function server(port = Number(process.env.PORT) || 8080) {
+  /* istanbul ignore next */
   return createApp().listen(port);
 }
