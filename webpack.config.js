@@ -70,15 +70,68 @@ const resolve = {
   ],
 };
 
+const getRules = (isProd, exportOnlyLocals) => [
+  {
+    test: /\.s?[ac]ss$/,
+    use: {
+      loader: "css-loader",
+      options: {
+        modules: {
+          exportLocalsConvention: "camelCase",
+          exportOnlyLocals,
+          localIdentContext: path.resolve(__dirname, "src/ui"),
+          localIdentName: isProd
+            ? "[local]__[contenthash:base64:5]"
+            : "[path][name]_[local]",
+        },
+        sourceMap: isProd,
+      },
+    },
+  },
+  {
+    test: /\.s[ac]ss$/,
+    use: {
+      loader: "sass-loader",
+      options: {
+        sourceMap: isProd,
+        sassOptions: {
+          includePaths: ["src/ui/"],
+        },
+      },
+    },
+  },
+  {
+    test: /\.tsx?$/,
+    exclude: /[\\/]node_modules[\\/]/,
+    use: {
+      loader: "ts-loader",
+      options: {
+        configFile: path.resolve(__dirname, "tsconfig.json"),
+        experimentalWatchApi: true,
+        transpileOnly: true,
+      },
+    },
+  },
+  {
+    test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+    use: "@svgr/webpack",
+  },
+  {
+    test: /\.(jpg|png|gif)$/,
+    use: "file-loader",
+  },
+];
+
 module.exports = (env, argv) => {
   const isProd =
     argv.production ||
     PRODUCTION_PATTERN.test(process.env.NODE_ENV) ||
     PRODUCTION_PATTERN.test(argv.mode);
 
-  const watch = Boolean(isProd ? argv.watch : argv.watch !== false);
-  const liveReload = argv.liveReload && watch;
   const port = Number(argv.port) || Number(process.env.PORT) || 8080;
+  const vendors = Boolean(isProd ? false : argv.vendors !== false);
+  const watch = Boolean(isProd ? argv.watch : argv.watch !== false);
+  const liveReload = watch && argv.liveReload;
 
   return [
     {
@@ -92,78 +145,17 @@ module.exports = (env, argv) => {
       module: {
         rules: [
           {
-            test: /\.s?css$/,
-            use: [
-              isProd
-                ? {
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {
-                      sourceMap: true,
-                    },
-                  }
-                : "style-loader",
-            ],
-          },
-          {
-            test: /\.css$/,
-            use: [
-              {
-                loader: "css-loader",
-                options: {
-                  sourceMap: isProd,
-                },
-              },
-            ],
-          },
-          {
-            test: /\.scss$/,
-            use: [
-              {
-                loader: "css-loader",
-                options: {
-                  sourceMap: isProd,
-                  modules: {
-                    localIdentContext: path.resolve(__dirname, "src/ui"),
-                    localIdentName: isProd
-                      ? "[local]__[contenthash:base64:5]"
-                      : "[path][name]_[local]",
-                    exportLocalsConvention: "camelCase",
+            test: /\.s?[ac]ss$/,
+            use: isProd
+              ? {
+                  loader: MiniCssExtractPlugin.loader,
+                  options: {
+                    sourceMap: true,
                   },
-                },
-              }, // translates CSS into CommonJS
-              {
-                loader: "sass-loader",
-                options: {
-                  sourceMap: isProd,
-                  sassOptions: {
-                    includePaths: ["src/ui/"],
-                  },
-                },
-              }, // compiles Sass to CSS, using Node Sass by default
-            ],
+                }
+              : "style-loader",
           },
-          {
-            test: /\.(tsx|ts)$/,
-            exclude: /[\\/]node_modules[\\/]/,
-            use: [
-              {
-                loader: "ts-loader",
-                options: {
-                  configFile: path.resolve(__dirname, "tsconfig.json"),
-                  transpileOnly: true,
-                  experimentalWatchApi: true,
-                },
-              },
-            ],
-          },
-          {
-            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-            use: "@svgr/webpack",
-          },
-          {
-            test: /\.(jpg|png|gif)$/,
-            use: "file-loader",
-          },
+          ...getRules(isProd),
         ],
       },
       optimization: isProd
@@ -213,7 +205,7 @@ module.exports = (env, argv) => {
               }),
             ]
           : []),
-        ...(argv.vendors !== false
+        ...(vendors
           ? [
               new HtmlWebpackTagsPlugin({
                 tags: ["vendors.js"],
@@ -240,30 +232,7 @@ module.exports = (env, argv) => {
       externals: isProd ? undefined : nodeExternals(),
       mode: isProd ? "production" : "development",
       module: {
-        rules: [
-          {
-            test: /\.ts$/,
-            exclude: /[\\/]node_modules[\\/]/,
-            use: [
-              {
-                loader: "ts-loader",
-                options: {
-                  configFile: path.resolve(__dirname, "tsconfig.json"),
-                  transpileOnly: true,
-                  experimentalWatchApi: true,
-                },
-              },
-            ],
-          },
-          {
-            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-            use: "@svgr/webpack",
-          },
-          {
-            test: /\.(jpg|png|gif)$/,
-            use: "file-loader",
-          },
-        ],
+        rules: getRules(isProd, true),
       },
       optimization: isProd
         ? {

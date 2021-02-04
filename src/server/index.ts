@@ -7,10 +7,10 @@ export function createApp(root = process.cwd()) {
 
   app.disable("x-powered-by");
 
-  app.use(express.static(`${root}/dist`));
-  app.use(express.static(`${root}/public`));
+  app.use(express.static(`${root}/dist`, { index: false }));
+  app.use(express.static(`${root}/public`, { index: false }));
 
-  app.use(createRouter());
+  app.use(createRouter(root));
 
   app.use((_req, res) => {
     res.sendFile(`${root}/dist/index.html`);

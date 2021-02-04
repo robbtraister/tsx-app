@@ -1,4 +1,3 @@
-import { BrowserRouter } from "react-router-dom";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
@@ -10,10 +9,8 @@ import { queryClient } from "./client";
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Sidebar />
-        <Pages />
-      </BrowserRouter>
+      <Sidebar />
+      <Pages />
       <ReactQueryDevtools position="bottom-right" />
     </QueryClientProvider>
   );

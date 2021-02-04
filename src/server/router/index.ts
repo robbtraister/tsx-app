@@ -1,15 +1,14 @@
 import express from "express";
 
-export function createRouter() {
+import { createApiRouter } from "./api";
+import { createRenderRouter } from "./render";
+
+export function createRouter(root = process.cwd()) {
   const router = express.Router();
 
-  router.use("/api/v1/error", () => {
-    throw new Error("error");
-  });
+  router.use("/api", createApiRouter());
 
-  router.use("/api/v1/pages", (_req, res) => {
-    res.send({ pages: ["one", "two"] });
-  });
+  router.use(createRenderRouter(root));
 
   return router;
 }
