@@ -11,7 +11,9 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <Sidebar />
       <Pages />
-      <ReactQueryDevtools position="bottom-right" />
+      {process.env.NODE_ENV === "development" ? (
+        <ReactQueryDevtools position="bottom-right" />
+      ) : null}
     </QueryClientProvider>
   );
 }

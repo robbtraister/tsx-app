@@ -14,9 +14,9 @@
     "noImplicitAny": true,
     "outDir": "dist",
     "paths": {
-      "ui/*": ["src/ui/*"],
       "server/*": ["src/server/*"],
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
+      "ui/*": ["src/ui/*"]
     },
     "plugins": [
       {

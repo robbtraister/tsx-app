@@ -16,6 +16,10 @@ export function createApp(root = process.cwd()) {
     res.sendFile(`${root}/dist/index.html`);
   });
 
+  app.use((_err: any, _req: any, res: any, _next: any) => {
+    res.sendStatus(500);
+  });
+
   return app;
 }
 
