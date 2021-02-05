@@ -18,6 +18,7 @@ export function createApp(root = process.cwd()) {
   app.use(createRouter());
 
   app.use((_req, res) => {
+    /* istanbul ignore next */
     res.sendFile(path.join(distDir, "index.html"));
   });
 
@@ -28,6 +29,7 @@ export function createApp(root = process.cwd()) {
   return app;
 }
 
+/* istanbul ignore next */
 export function server(port = Number(process.env.PORT) || 8080) {
   /* istanbul ignore next */
   return createApp().listen(port);

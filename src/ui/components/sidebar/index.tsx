@@ -18,6 +18,7 @@ export function Sidebar() {
     let mounted = true;
 
     axios.get<Page[]>("/api/v1/pages").then(({ data }) => {
+      /* istanbul ignore else */
       if (mounted) {
         setPages(data);
       }

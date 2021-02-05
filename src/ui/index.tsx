@@ -5,6 +5,11 @@ import { App } from "./app";
 
 import "./index.scss";
 
+if (process.env.NODE_ENV === "development") {
+  const { worker } = require("mocks/msw/worker");
+  worker.start();
+}
+
 ReactDOM.render(
   <BrowserRouter>
     <App />

@@ -16,4 +16,8 @@ describe("render routes", () => {
       .expect(302)
       .expect("Location", "/");
   });
+
+  it("no index.html", () => {
+    return supertest(createApp("non-existent-directory")).get("/").expect(500);
+  });
 });
