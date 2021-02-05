@@ -1,7 +1,7 @@
 import { render, waitFor } from "@testing-library/react";
 import { StaticRouter } from "react-router";
 
-import { server } from "fakes/msw/server";
+import { server } from "mocks/msw/server";
 
 import { Sidebar } from ".";
 

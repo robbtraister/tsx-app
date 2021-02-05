@@ -14,7 +14,7 @@
     "noImplicitAny": true,
     "outDir": "dist",
     "paths": {
-      "fakes/*": ["fakes/*"],
+      "mocks/*": ["src/mocks/*"],
       "server/*": ["src/server/*"],
       "src/*": ["src/*"],
       "ui/*": ["src/ui/*"]
@@ -42,8 +42,6 @@
     "target": "es6"
   },
   "include": [
-    "fakes",
-    "fakes/**/*.json",
     "src",
     "src/**/*.json"
   ]
