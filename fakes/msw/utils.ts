@@ -1,32 +1,25 @@
-import { rest } from "msw";
+import { rest, RequestHandler } from "msw";
 
-export function createHandler(
-  endpoint: string,
-  resource: {
-    get: (id: string) => Promise<unknown>;
-    list: (search: URLSearchParams) => Promise<unknown>;
-  }
-) {
+import { resources, Resource } from "../resources";
+
+function createHandler(endpoint: string, resource: Resource) {
   return [
     rest.get(endpoint, async (req, res, ctx) => {
-      return res(ctx.json(await resource.list(req.url.searchParams)));
+      const query = [...req.url.searchParams.entries()].reduce(
+        (acc, [key, value]) => ({ ...acc, [key]: value }),
+        {}
+      );
+      return res(ctx.json(await resource.list(query)));
     }),
+
     rest.get(`${endpoint}/:id`, async (req, res, ctx) => {
       return res(ctx.json(await resource.get(req.params.id)));
     }),
   ];
 }
 
-export class Resource<Type extends { id: string } = { id: string }> {
-  constructor(private load: () => Promise<{ default: Type[] }>) {}
-
-  async get(id: string): Promise<Type | undefined> {
-    const { default: data } = await this.load();
-    return data.find((datum) => datum.id === id);
-  }
-
-  async list(_search: URLSearchParams): Promise<Type[]> {
-    const { default: data } = await this.load();
-    return data;
-  }
-}
+export const handlers = ([] as RequestHandler[]).concat(
+  ...Object.entries(resources).map(([endpoint, resource]) =>
+    createHandler(endpoint, resource)
+  )
+);
